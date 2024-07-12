@@ -69,21 +69,21 @@ void StraightLine::configure(
 void StraightLine::cleanup()
 {
   RCLCPP_INFO(
-    node_->get_logger(), "CleaningUp plugin %s of type NavfnPlanner",
+    node_->get_logger(), "CleaningUp plugin %s of type StraighLinePlanner",
     name_.c_str());
 }
 
 void StraightLine::activate()
 {
   RCLCPP_INFO(
-    node_->get_logger(), "Activating plugin %s of type NavfnPlanner",
+    node_->get_logger(), "Activating plugin %s of type StraighLinePlanner",
     name_.c_str());
 }
 
 void StraightLine::deactivate()
 {
   RCLCPP_INFO(
-    node_->get_logger(), "Deactivating plugin %s of type NavfnPlanner",
+    node_->get_logger(), "Deactivating plugin %s of type StraighLinePlanner",
     name_.c_str());
 }
 
