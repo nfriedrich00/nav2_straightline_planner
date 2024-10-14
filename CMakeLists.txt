@@ -56,7 +56,15 @@ ament_target_dependencies(${library_name}
   ${dependencies}
 )
 
-target_compile_definitions(${library_name} PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
+# get ROS_DISTRO from environment variable and set IS_BEFORE_JAZZY to true if ROS_DISTRO is less than "iron"
+if($ENV{ROS_DISTRO} STREQUAL "iron" OR $ENV{ROS_DISTRO} STREQUAL "humble") 
+  set(IS_BEFORE_JAZZY 1)
+else()
+  set(IS_BEFORE_JAZZY 0)
+endif()
+
+# set IS_BEFORE_JAZZY
+target_compile_definitions(${library_name} PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS" "IS_BEFORE_JAZZY=${IS_BEFORE_JAZZY}")
 
 
 pluginlib_export_plugin_description_file(nav2_core global_planner_plugin.xml)

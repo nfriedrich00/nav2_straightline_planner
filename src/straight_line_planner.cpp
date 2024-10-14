@@ -87,7 +87,7 @@ void StraightLine::deactivate()
     name_.c_str());
 }
 
-nav_msgs::msg::Path StraightLine::createPlan(
+nav_msgs::msg::Path StraightLine::createPlanNoFcn(
   const geometry_msgs::msg::PoseStamped & start,
   const geometry_msgs::msg::PoseStamped & goal)
 {

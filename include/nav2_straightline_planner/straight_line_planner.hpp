@@ -43,6 +43,8 @@
 
 #include <string>
 #include <memory>
+#include <cmath>
+#include <type_traits>
 
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/point.hpp"
@@ -78,10 +80,33 @@ public:
   // plugin deactivate
   void deactivate() override;
 
-  // This method creates path for given start and goal pose.
-  nav_msgs::msg::Path createPlan(
-    const geometry_msgs::msg::PoseStamped & start,
-    const geometry_msgs::msg::PoseStamped & goal) override;
+  // check ROS_DISTRO compile definition to determine the method signature // if ROS_DISTRO is "humble" or "iron"
+
+// print value of ROS_DISTRO via preprocessor
+
+#define XSTR(x) STR(x)
+#define STR(x) #x
+
+#pragma message("IS_BEFORE_JAZZY is " XSTR(IS_BEFORE_JAZZY))
+
+#if IS_BEFORE_JAZZY == 1
+  nav_msgs::msg::Path createPlan(const geometry_msgs::msg::PoseStamped & start, const geometry_msgs::msg::PoseStamped & goal) override
+  {
+    return createPlanNoFcn(start, goal);
+  }
+#else
+  nav_msgs::msg::Path createPlan(const geometry_msgs::msg::PoseStamped & start, const geometry_msgs::msg::PoseStamped & goal, std::function<bool()> cancellation_requested) override
+  {
+    return createPlanWithFcn(start, goal, cancellation_requested);
+  }
+#endif
+
+  nav_msgs::msg::Path createPlanNoFcn(const geometry_msgs::msg::PoseStamped & start, const geometry_msgs::msg::PoseStamped & goal);
+
+  nav_msgs::msg::Path createPlanWithFcn(const geometry_msgs::msg::PoseStamped & start, const geometry_msgs::msg::PoseStamped & goal, std::function<bool()> cancellation_requested)
+  {
+    return createPlanNoFcn(start, goal); // just for now
+  }
 
 private:
   // TF buffer
